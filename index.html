@@ -67,6 +67,9 @@ This app takes a picture with your device's camera and then displays color infor
       <p id="messageDisplayArea">This area will be replaced by the RGB values once the image is tapped.</p> <!-- message above canvas -->
 	<p id="messageDisplayArea2">This area will be replaced by the HSV values once the image is tapped.</p> <!-- message above canvas -->
 	<p id="messageDisplayArea3">This area will be replaced by the color name once the image is tapped.</p> <!-- message above canvas -->
+  <!--Philip: I added a new line of text to be replaced by the pH value-->
+      <p id="messageDisplayArea4">This area will be replaced by the pH values once the image is tapped.</p> <!-- message above canvas -->
+
 
 		  </div>
 <!--    <footer class="w3-bottom w3-container w3-flat-carrot">
@@ -87,6 +90,8 @@ This app takes a picture with your device's camera and then displays color infor
    	 const message = document.getElementById('messageDisplayArea');
 	  const message2 = document.getElementById('messageDisplayArea2');
 	const message3 = document.getElementById('messageDisplayArea3');
+//Philip: made a new message4 so that I could include the pH text
+    const message4 = document.getElementById('messageDisplayArea4');
 
 	  
 	const fileInput = document.getElementById('fileInput');
@@ -111,6 +116,12 @@ function rgbToHsv(r, g, b) {
       }
       return [h * 360, s * 100, v * 100];
     }
+// Philip: this function will convert R values into pH
+function rgbTopH(r) {
+      pH = -0.0277*r + 9.27;
+      return [pH];
+    }
+
 
 // this function takes the HSV values of the pixel and uses if statements to categorize a color   
  function getColorName(h, s, v) {
@@ -131,11 +142,15 @@ function rgbToHsv(r, g, b) {
 
       const pixel = ctx.getImageData(x, y, 1, 1).data;
       const [h, s, v] = rgbToHsv(pixel[0], pixel[1], pixel[2]);
+      const [pH] = rgbTopH(pixel[0]);
      const colorName = getColorName(h, s, v);
    
       message.innerText = "HSV values= " + Math.round(h) + ", " + Math.round(s) + ", " + Math.round(v);
 	message2.innerText = "RGB values= " + Math.round(pixel[0]) + ", " + Math.round(pixel[1]) + ", " + Math.round(pixel[2]);
 	    message3.innerText = "Color Name= " + colorName;
+//Philip: created a new line for generating the predicted pH
+      message4.innerText = "Predicted pH = " + pH
+
     }; 
 // color that is tapped and detected is shown below the selected photo
    
